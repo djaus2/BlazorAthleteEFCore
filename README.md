@@ -1,6 +1,6 @@
 # BlazorAthleteEFCore
 Based upon BlazorEmployeeEFCore from Sarathlal Saseendran with some Generics.  
-A Blazor Ser=er App with CRUD.
+A Blazor Server App with CRUD.
   
 The CustomHttpClient uses a Generics class. (Athlete in this app).
 Uses Entity Framework and a Azure Microsft SQL Server
