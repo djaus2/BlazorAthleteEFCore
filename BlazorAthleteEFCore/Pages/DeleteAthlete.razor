@@ -1,0 +1,61 @@
+﻿@using BlazorAthleteEFCore.Data
+
+@page "/deleteAthlete/{id}"
+
+@inject CustomHttpClient<Athlete> Http
+@inject NavigationManager NavigationManager
+@inject AppSettingsService AppSettingsService
+
+<h2>Delete</h2>
+<p>Are you sure you want to delete this athlete with Id :<b> @id</b></p>
+<br />
+<div class="col-md-4">
+    <table class="table">
+        <tr>
+            <td>Name</td>
+            <td>@athlete.Id</td>
+        </tr>
+        <tr>
+            <td>Mobile</td>
+            <td>@athlete.Name</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>@athlete.Mobile</td>
+        </tr>
+        <tr>
+            <td>Company</td>
+            <td>@athlete.Email</td>
+        </tr>
+    </table>
+    <div class="form-group">
+        <input type="button" value="Delete" @onclick="@Delete" class="btn btn-primary" />
+        <input type="button" value="Cancel" @onclick="@Cancel" class="btn" />
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public string id { get; set; }
+    string baseUrl;
+    Athlete athlete = new Athlete();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string target = CustomHttpClient<Athlete>.BaseUrl + "/api/Athletes/details/" + id;
+        athlete = await Http.GetJsonAsync<Athlete>(target);
+    }
+
+    protected async Task Delete()
+    {
+        string target = CustomHttpClient<Athlete>.BaseUrl + "/api/Athletes/delete/" + id;
+        await Http.DeleteAsync(target);
+        NavigationManager.NavigateTo("listAthletes");
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("listAthletes");
+    }
+}   

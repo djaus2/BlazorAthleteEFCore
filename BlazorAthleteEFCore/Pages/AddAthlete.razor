@@ -1,0 +1,53 @@
+﻿@using BlazorAthleteEFCore.Data
+
+@page "/addAthlete"
+
+@inject CustomHttpClient<Athlete> Http
+@inject NavigationManager NavigationManager
+@inject AppSettingsService AppSettingsService
+
+<h2>Create athlete</h2>
+<hr />
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Name" class="control-label">Name</label>
+                <input for="Name" class="form-control" @bind="@athlete.Name" />
+            </div>
+            <div class="form-group">
+                <label for="Mobile" class="control-label">Mobile</label>
+                <input for="Mobile" class="form-control" @bind="@athlete.Mobile" />
+            </div>
+            <div class="form-group">
+                <label for="Email" class="control-label">Email</label>
+                <input for="Email" class="form-control" @bind="@athlete.Email" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@Createathlete" value="Save" />
+                <input type="button" class="btn" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+
+    Athlete athlete = new Athlete();
+
+    protected async Task Createathlete()
+    {
+        string target = CustomHttpClient<Athlete>.BaseUrl + "/api/Athletes/create";
+        await Http.PostJsonAsync(target, athlete);
+        NavigationManager.NavigateTo("listAthletes");
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("listAthletes");
+    }
+}   

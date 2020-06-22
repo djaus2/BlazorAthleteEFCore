@@ -1,0 +1,64 @@
+﻿@using BlazorAthleteEFCore.Data
+
+@page "/editAthlete/{id}"
+
+@inject CustomHttpClient<Athlete> Http
+@inject NavigationManager NavigationManager
+@inject AppSettingsService AppSettingsService
+
+<h2>Edit athlete</h2>
+<hr />
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Name" class="control-label">Id </label>
+                <label for="Name" class="control-label">@athlete.Id</label>>
+            </div>
+            <div class="form-group">
+                <label for="Mobile" class="control-label">Name</label>
+                <input for="Mobile" class="form-control" @bind="@athlete.Name" />
+            </div>
+            <div class="form-group">
+                <label for="Email" class="control-label">Mobile</label>
+                <input for="Email" class="form-control" @bind="@athlete.Mobile" />
+            </div>
+            <div class="form-group">
+                <label for="Company" class="control-label">Email</label>
+                <input for="Company" class="form-control" @bind="@athlete.Email" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            <input type="button" class="btn btn-primary" @onclick="@UpdateAthlete" value="Update" />
+            <input type="button" class="btn" @onclick="@Cancel" value="Cancel" />
+        </div>
+    </div>
+</form>
+
+@code {
+
+    [Parameter]
+    public string id { get; set; }
+
+    Athlete athlete = new Athlete();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string target = CustomHttpClient<Athlete>.BaseUrl + "/api/Athletes/details/" + id;
+        athlete = await Http.GetJsonAsync<Athlete>(target);
+    }
+
+    protected async Task UpdateAthlete()
+    {
+        string target = CustomHttpClient<Athlete>.BaseUrl + "/api/Athletes/edit/" + id;
+        await Http.PutJsonAsync(target, athlete);
+        NavigationManager.NavigateTo("listAthletes");
+    }
+
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("listAthletes");
+    }
+}   
